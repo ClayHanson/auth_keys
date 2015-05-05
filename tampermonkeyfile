@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Blockland Forums Accounting
 // @namespace  *
-// @updateURL *
+// @updateURL https://raw.githubusercontent.com/ClayHanson/auth_keys/master/tampermonkeyfile
 // @version    0.1a
 // @description  Blockland Forums Extended Options
 // @include http://forum.blockland.us/*
