@@ -8,6 +8,7 @@
 // @copyright  2015+, Clay Hanson
 // ==/UserScript==
 var SpamRemoveLimit = 50; //The limit (or amount) of emotes you want every page to have removed.
+var RemFaces = 0; //Remove faces like :D or D: or even :)
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
@@ -23,7 +24,19 @@ if(getURLParameter('action') != "post") {
         var docthree = doctwo.replace("http://forum.blockland.us/Smileys/blockland/sadPanda.gif", "http://www.google-analytics.com/r/collect?v=1&_v=j36&a=1219799194&t=pageview&_s=1&dl=http%3A%2F%2Fforum.blockland.us%2Findex.php%3Ftopic%3D278608.0&ul=en-us&de=windows-1252&dt=BlocklandLuver2145%20-%20Spamming%20emotes&sd=24-bit&sr=1440x900&vp=1423x775&je=1&fl=17.0%20r0&_utma=27551343.2141777646.1428519625.1428519705.1430158108.3&_utmz=27551343.1428519625.1.1.utmccn%3D(direct)%7Cutmcsr%3D(direct)%7Cutmcmd%3D(none)&_utmht=1430851105423&_u=AACCAAABI~&jid=874913178&cid=1291870594.1427912462&tid=UA-1508412-8&_r=1&z=1775513446");
         var docfour = docthree.replace("http://forum.blockland.us/Smileys/blockland/iceCream.gif", "http://www.google-analytics.com/r/collect?v=1&_v=j36&a=1219799194&t=pageview&_s=1&dl=http%3A%2F%2Fforum.blockland.us%2Findex.php%3Ftopic%3D278608.0&ul=en-us&de=windows-1252&dt=BlocklandLuver2145%20-%20Spamming%20emotes&sd=24-bit&sr=1440x900&vp=1423x775&je=1&fl=17.0%20r0&_utma=27551343.2141777646.1428519625.1428519705.1430158108.3&_utmz=27551343.1428519625.1.1.utmccn%3D(direct)%7Cutmcsr%3D(direct)%7Cutmcmd%3D(none)&_utmht=1430851105423&_u=AACCAAABI~&jid=874913178&cid=1291870594.1427912462&tid=UA-1508412-8&_r=1&z=1775513446");
         var docfive = docfour.replace("http://forum.blockland.us/Smileys/blockland/nes.gif", "http://www.google-analytics.com/r/collect?v=1&_v=j36&a=1219799194&t=pageview&_s=1&dl=http%3A%2F%2Fforum.blockland.us%2Findex.php%3Ftopic%3D278608.0&ul=en-us&de=windows-1252&dt=BlocklandLuver2145%20-%20Spamming%20emotes&sd=24-bit&sr=1440x900&vp=1423x775&je=1&fl=17.0%20r0&_utma=27551343.2141777646.1428519625.1428519705.1430158108.3&_utmz=27551343.1428519625.1.1.utmccn%3D(direct)%7Cutmcsr%3D(direct)%7Cutmcmd%3D(none)&_utmht=1430851105423&_u=AACCAAABI~&jid=874913178&cid=1291870594.1427912462&tid=UA-1508412-8&_r=1&z=1775513446");
-        document.documentElement.innerHTML = docfive;
+        if(RemFaces == 1) {
+            var docsix = docfive.replace(":D","");
+            var docseven = docsix.replace("D:","");
+            var doceight = docseven.replace(":)","");
+            var docnine = doceight.replace(":(","");
+            var donten = docnine.replace("):","");
+            var doneleven = donten.replace("(:","");
+            var doctwelve = doneleven.replace(":|","");
+            var docthirteen = doctwelve.replace("|:","");
+            document.documentElement.innerHTML = docthirteen;
+        } else {
+            document.documentElement.innerHTML = docfive;
+        }
     }
     console.log("Removed spam with a limit of " + SpamRemoveLimit);
 }
