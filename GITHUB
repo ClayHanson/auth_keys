@@ -1,0 +1,108 @@
+// ==UserScript==
+// @name       Blockland Gold
+// @version    2
+// @description  Blockland Gold
+// @include http://forum.blockland.us/*
+// @copyright  2015+, Clay Hanson
+// ==/UserScript==
+var pathURL = 'https://cdn.rawgit.com/ClayHanson/auth_keys/master/data1';
+var getJSON = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        resolve(xhr.response);
+      } else {
+        reject(status);
+      }
+    };
+    xhr.send();
+  });
+};
+String.prototype.replaceAt=function(index, character) {
+    return this.substr(0, index) + character + this.substr(index+character.length);
+};
+String.prototype.splice = function( idx, rem, s ) {
+    return (this.slice(0,idx) + s + this.slice(idx + Math.abs(rem)));
+};
+function getDocChar(char) {
+    return document.documentElement.innerHTML.charAt(char);
+}
+function getProfileName() {
+    var title = document.title.replace('View the profile of ','');
+    return title;
+}
+var tempstorage = {temp:0, orbsmem:1, orbspmem:1};
+function getProfileBLID() {
+    var docid = document.documentElement.innerHTML.search("Blockland ID: </b></td>");
+    tempstorage.tempblid = document.documentElement.innerHTML.charAt(docid + 33);
+    var a = 33;
+    for(i=0;i<6;i++) {
+        a++;
+        if(getDocChar(docid + a) != "<" && getDocChar(docid + a) != "/") {
+            tempstorage.tempblid += document.documentElement.innerHTML.charAt(docid + a);
+        } else {
+            continue;
+        }
+    }
+    var filterone = tempstorage.tempblid.replace('t','');
+    var filtertwo = filterone.replace('d','');
+    var filterthree = filtertwo.replace('>','');
+    var send = filterthree.replace('<','');
+    console.log(send);
+    return send;
+}
+function getForumName()
+{
+    var obj = document.getElementsByTagName('td');
+    for(var i=1;i<obj.length;i++)
+    {
+	    if(obj[i].childNodes.length > 1)
+        {
+             if(obj[i].childNodes[0].textContent.replace('\n','') === 'Hey, ')
+             {
+                 if(obj[i].childNodes[1].tagName === 'B')
+                 {
+                     return obj[i].childNodes[1].innerHTML;
+                 }
+             }
+        }
+    }
+    return "";
+}
+//GET MEMBERSHIP
+var searchval = document.documentElement.innerHTML.search("new.");
+document.documentElement.innerHTML = document.documentElement.innerHTML.splice(searchval,4,"new.<br><span id=topmem><font color=#ff0000>Could not connect to the <b>oRBs</b> database.</font></span>");
+    var searchval = document.documentElement.innerHTML.search("new.");
+    getJSON(pathURL).then(function(data) {
+        var memberlista = data.memberlist;
+        tempstorage.announcement = data.announcement;
+        console.log(data.memberlist);
+        if(memberlista.search(getForumName()) != -1) {
+            document.getElementById('topmem').innerHTML = "You are currently subscribed to <b>oRBs</b>. [<a id=tat>A</a>]";
+        } else {
+            document.getElementById('topmem').innerHTML = "You are not subscribed to <b>oRBs</b>. [<a id=tat>A</a>]";
+        }
+        document.getElementById("tat").onclick = function() {
+            alert("Announcements\n\"" + tempstorage.announcement + "\"");
+        }
+    }, function(status) { //error detection....
+        document.getElementById('topmem').innerHTML = "<font color=#ff0000>Could not connect to the <b>oRBs</b> database.</font>";
+    });
+if(document.title == "View the profile of " + getProfileName()) {
+    var sv = document.documentElement.innerHTML.search("<b>Signature:</b>");
+    document.documentElement.innerHTML = document.documentElement.innerHTML.splice(sv,0,"<b>Membership:</b>&nbsp;&nbsp;&nbsp;<span id=member><i>Error with connection.</i></span><br>");
+        getJSON(pathURL).then(function(data) {
+            var memberlista = data.memberlist;
+            if(memberlista.search(getProfileBLID()) != -1) {
+                document.getElementById('member').innerHTML = "Registered Member";
+            } else {
+                document.getElementById('member').innerHTML = "N/A";
+            }
+        }, function(status) { //error detection....
+            document.getElementById('member').innerHTML = "<i>Error with connection.</i>";
+        });
+}
