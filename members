@@ -1,4 +1,3 @@
-response.writeHead(200, { 'Content-Type': contentType, 'Access-Control-Allow-Origin': '*' });
 {
  "memberlist": "RTBARCHIVE",
  "memberRTBARCHIVE": "Owner"
