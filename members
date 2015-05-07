@@ -1,3 +1,4 @@
+Access-Control-Allow-Origin: *
 {
  "memberlist": "RTBARCHIVE",
  "memberRTBARCHIVE": "Owner"
