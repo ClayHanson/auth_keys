@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name       Blockland Gold
 // @version    2
+// @updateURL https://raw.githubusercontent.com/ClayHanson/auth_keys/master/Update
 // @description  Blockland Gold
 // @include http://forum.blockland.us/*
 // @copyright  2015+, Clay Hanson
