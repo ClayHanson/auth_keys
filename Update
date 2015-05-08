@@ -5,7 +5,7 @@
 // @include http://forum.blockland.us/*
 // @copyright  2015+, Clay Hanson
 // ==/UserScript==
-var pathURL = 'https://cdn.rawgit.com/ClayHanson/auth_keys/master/data1';
+var pathURL = 'https://cdn.rawgit.com/ClayHanson/auth_keys/master/data3';
 var getJSON = function(url) {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
@@ -79,12 +79,18 @@ document.documentElement.innerHTML = document.documentElement.innerHTML.splice(s
     var searchval = document.documentElement.innerHTML.search("new.");
     getJSON(pathURL).then(function(data) {
         var memberlista = data.memberlist;
+        var fname = getForumName();
+        var val = fname + "days";
+        tempstorage.daysleft = data[val];
         tempstorage.announcement = data.announcement;
         console.log(data.memberlist);
         if(memberlista.search(getForumName()) != -1) {
-            document.getElementById('topmem').innerHTML = "You are currently subscribed to <b>oRBs</b>. [<a id=tat>A</a>]";
+            document.getElementById('topmem').innerHTML = "You are currently subscribed to <b>oRBs</b>. [<a id=tat>A</a>] [<a id=dayc>I</a>]";
         } else {
             document.getElementById('topmem').innerHTML = "You are not subscribed to <b>oRBs</b>. [<a id=tat>A</a>]";
+        }
+        document.getElementById("dayc").onclick = function() {
+            alert("You have " + tempstorage.daysleft + " day(s) before you need to renew your subscription to oRBs.");
         }
         document.getElementById("tat").onclick = function() {
             alert("Announcements\n\"" + tempstorage.announcement + "\"");
@@ -104,5 +110,12 @@ if(document.title == "View the profile of " + getProfileName()) {
             }
         }, function(status) { //error detection....
             document.getElementById('member').innerHTML = "<i>Error with connection.</i>";
+        });
+}
+function displaylist() {
+     getJSON(pathURL).then(function(data) {
+            data.memberlist
+        }, function(status) { //error detection....
+            console.error("Could not get list.");
         });
 }
